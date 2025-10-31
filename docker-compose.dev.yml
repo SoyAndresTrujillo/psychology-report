@@ -1,0 +1,81 @@
+version: '3.8'
+
+# Services section
+# -----------------
+# This section defines the services that make up the application.
+# In this case, we have two services: "postgres" and "web".
+
+services:
+  postgres:
+    # postgres service
+    # ----------------
+    # This service runs a PostgreSQL database. It uses the "postgres:15" image
+    # from Docker Hub. The container name is set to "psychologist_postgres".
+    # The database credentials and name are sourced from the .env file.
+    # The PostgreSQL port is exposed on the host machine, and the data is 
+    # persisted in the "postgres_data" directory.
+    # The service is also part of a "psychologist-network" network.
+    # The healthcheck command verifies that the database is available.
+    image: postgres:15
+    container_name: psychologist_postgres
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - psychologist-network
+    # This healthcheck periodically runs the `pg_isready` command to check the
+    # availability of the PostgreSQL database. It uses the `DB_USER` environment
+    # variable to authenticate. The healthcheck runs every 10 seconds, with a
+    # timeout of 5 seconds and retries up to 5 times before considering the
+    # service unhealthy.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    # web service
+    # -----------
+    # This service runs the web application. It builds the application using
+    # the Dockerfile in the current directory. The container name is set to
+    # "psychologist_web". The web service runs the Django development server
+    # on port 8000, and the database credentials are sourced from the .env file.
+    # The web service depends on the "postgres" service, and the "psychologist-network"
+    # network is used. The web service exposes port 8000 on the host machine.
+    # The "build" section specifies the context and Dockerfile to use for building
+    # the image. The "container_name" sets the name of the container to "psychologist_web".
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: psychologist_web
+    # The "command" section runs the Django development server with the specified
+    # arguments. The "volumes" section mounts the current directory to the "/app" directory
+    # inside the container, allowing for hot reloading of the application.
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      - DEBUG=True
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - psychologist-network
+
+# Networks section
+# -----------------
+# This section defines a network called "psychologist-network".
+# The network is of type "bridge".
+networks:
+  psychologist-network:
+    driver: bridge

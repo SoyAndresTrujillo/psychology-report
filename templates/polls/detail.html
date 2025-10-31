@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Poll Detail{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Poll Details</h2>
+            <a href="{% url 'polls:list' %}" class="btn btn-secondary">Back to List</a>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4>{{ poll.description }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Poll ID:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ poll.id }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Description:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ poll.description }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Rate:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span class="badge bg-{% if poll.rate >= 4 %}success{% elif poll.rate >= 3 %}warning{% else %}danger{% endif %} fs-5">
+                            {{ poll.rate }} / 5
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Created At:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ poll.created_at|date:"F d, Y H:i:s" }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Last Updated:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ poll.updated_at|date:"F d, Y H:i:s" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

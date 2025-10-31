@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Psychologist System{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to the Psychologist Appointment System</h1>
+    <p class="lead">Manage patients, psychologists, offices, and appointments efficiently.</p>
+    <hr class="my-4">
+    
+    <div class="row mt-5">
+        <div class="col-md-3">
+            <div class="card text-center mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Accounts</h5>
+                    <p class="card-text">Manage patients and psychologists</p>
+                    <a href="{% url 'accounts:list' %}" class="btn btn-primary btn-sm">View</a>
+                    <a href="{% url 'accounts:create' %}" class="btn btn-outline-primary btn-sm">Create</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-center mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Offices</h5>
+                    <p class="card-text">Manage doctor's offices</p>
+                    <a href="{% url 'offices:list' %}" class="btn btn-primary btn-sm">View</a>
+                    <a href="{% url 'offices:create' %}" class="btn btn-outline-primary btn-sm">Create</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-center mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Doctors</h5>
+                    <p class="card-text">Manage doctor profiles</p>
+                    <a href="{% url 'doctors:list' %}" class="btn btn-primary btn-sm">View</a>
+                    <a href="{% url 'doctors:create' %}" class="btn btn-outline-primary btn-sm">Create</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-center mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Appointments</h5>
+                    <p class="card-text">Schedule appointments</p>
+                    <a href="{% url 'appointments:list' %}" class="btn btn-primary btn-sm">View</a>
+                    <a href="{% url 'appointments:create' %}" class="btn btn-outline-primary btn-sm">Create</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Polls</h5>
+                    <p class="card-text">Manage polls</p>
+                    <a href="{% url 'polls:list' %}" class="btn btn-primary btn-sm">View</a>
+                    <a href="{% url 'polls:create' %}" class="btn btn-outline-primary btn-sm">Create</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <a href="{% url 'appointments:report' %}" class="btn btn-success btn-lg">View Appointment Report</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

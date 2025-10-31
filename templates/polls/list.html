@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Polls List{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Polls</h2>
+    <a href="{% url 'polls:create' %}" class="btn btn-primary">+ Create Poll</a>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5>Total Polls: {{ total_count }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Rate</th>
+            <th>Created</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for poll in polls %}
+        <tr>
+            <td>{{ poll.id }}</td>
+            <td>{{ poll.description }}</td>
+            <td>
+                <span class="badge bg-{% if poll.rate >= 4 %}success{% elif poll.rate >= 3 %}warning{% else %}danger{% endif %}">
+                    {{ poll.rate }}
+                </span>
+            </td>
+            <td>{{ poll.created_at|date:"Y-m-d H:i" }}</td>
+            <td>
+                <a href="{% url 'polls:detail' poll.id %}" class="btn btn-sm btn-info">View</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">No polls found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

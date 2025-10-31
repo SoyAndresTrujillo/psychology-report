@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2>Create New Account</h2>
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">
+                        {{ field.label }}
+                        {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <div class="form-text">{{ field.help_text }}</div>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="text-danger">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn btn-primary">Create Account</button>
+            <a href="{% url 'accounts:list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Show/hide psychologist fields based on role selection
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleField = document.getElementById('id_role');
+        const officeField = document.getElementById('id_doctors_office').closest('.mb-3');
+        const specialtyField = document.getElementById('id_specialty').closest('.mb-3');
+        
+        function togglePsychologistFields() {
+            if (roleField.value === 'psychologist') {
+                officeField.style.display = 'block';
+                specialtyField.style.display = 'block';
+            } else {
+                officeField.style.display = 'none';
+                specialtyField.style.display = 'none';
+            }
+        }
+        
+        roleField.addEventListener('change', togglePsychologistFields);
+        togglePsychologistFields(); // Initial call
+    });
+</script>
+{% endblock %}
