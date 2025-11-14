@@ -57,8 +57,8 @@
             <td>{{ account.get_full_name }}</td>
             <td>{{ account.email }}</td>
             <td>
-                <span class="badge bg-{% if account.role == 'patient' %}info{% else %}success{% endif %}">
-                    {{ account.get_role_display }}
+                <span class="badge bg-{% if account.role.code == 'patient' %}info{% else %}success{% endif %}">
+                    {{ account.role.code }}
                 </span>
             </td>
             <td>{{ account.age }}</td>

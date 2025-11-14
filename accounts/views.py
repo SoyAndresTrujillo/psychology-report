@@ -77,7 +77,6 @@ class StatsMixin:
         
         return context
 
-
 class AccountListView(SearchMixin, StatsMixin, ListView):
     """List all accounts with pagination, search, and statistics.
     
