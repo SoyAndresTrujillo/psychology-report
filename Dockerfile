@@ -19,13 +19,15 @@ WORKDIR /app
 # Install system dependencies
 # ----------------------------
 # Install necessary system dependencies. In this case, it installs the
-# PostgreSQL client, gcc, Python development headers, and musl development
-# headers. Then, it cleans up the apt cache.
+# PostgreSQL client, gcc, Python development headers, musl development
+# headers, and SSL certificates for MongoDB Atlas connections.
+# Then, it cleans up the apt cache.
 RUN apt-get update && apt-get install -y \
     postgresql-client \
     gcc \
     python3-dev \
     musl-dev \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies

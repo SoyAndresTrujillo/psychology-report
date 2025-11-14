@@ -17,14 +17,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import home_view
+from accounts.views import HomeView
 
 urlpatterns = [
     # Django admin site, python itself has a built-in admin site
     path('admin/', admin.site.urls),
 
     # Home page with navigation to all sections
-    path('', home_view, name='home'),
+    path('', HomeView.as_view(), name='home'),
 
     # Accounts section, this call is simple because each app into it, manage its own urls and views
     path('accounts/', include('accounts.urls')),

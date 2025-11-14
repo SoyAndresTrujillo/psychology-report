@@ -55,6 +55,12 @@ A Django-based system for managing patient registration, psychologist profiles, 
 docker-compose -f docker-compose.dev.yml down
 ```
 
+### If we need to install a new package
+```bash
+docker-compose -f docker-compose.dev.yml up -d --build
+```
+and after re run again
+
 ## 📁 Project Structure
 
 ```

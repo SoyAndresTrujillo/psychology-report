@@ -30,7 +30,12 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-xj20t6-ro-e_vh3bfz0^jclk3r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
+# Allow localhost, 127.0.0.1, and ngrok domains
+# ngrok domains follow pattern: *.ngrok-free.app or *.ngrok.io
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+# Add ngrok support - accepts any *.ngrok-free.app or *.ngrok.io domain
+if DEBUG:
+    ALLOWED_HOSTS += ['.ngrok-free.app', '.ngrok.io', '.ngrok.app']
 
 
 # Application definition
@@ -42,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Core
+    'core',
     # Project apps
     'accounts',
     'offices',
@@ -139,3 +146,50 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# MongoDB Configuration
+MONGODB_URI = os.getenv('DB_URI_MONGO', 'mongodb://localhost:27017/')
+MONGODB_USER = os.getenv('DB_USER_MONGO', '')
+MONGODB_PASSWORD = os.getenv('DB_PASSWORD_MONGO', '')
+MONGODB_DATABASE = os.getenv('DB_NAME', 'psychologist_db')
+
+# Logging Configuration
+# 
+# Configures logging for the Django application with special handling for MongoDB operations.
+# 
+# Structure:
+# - formatters: Defines log message format with timestamp, level, module, and message
+# - handlers: Console output handler using the verbose formatter
+# - root: Default logging configuration for all loggers (INFO level)
+# - loggers: Specific logger configurations
+#   - core.mongodb: Dedicated logger for MongoDB operations with INFO level
+#     - Logs connection status, data sync operations, and errors
+#     - propagate=False prevents duplicate logs in parent loggers
+#     - Useful for debugging dual-database sync issues
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'core.mongodb': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

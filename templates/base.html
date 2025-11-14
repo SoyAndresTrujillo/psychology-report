@@ -7,6 +7,8 @@
     {% load static %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -62,6 +64,14 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'polls:list' %}">List Polls</a></li>
                             <li><a class="dropdown-item" href="{% url 'polls:create' %}">Create Poll</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Roles
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'accounts:create_role' %}">Create Role</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">

@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Account
+from .models import Account, Role
 from offices.models import DoctorsOffice
 from doctors.models import Doctor
 
@@ -219,10 +219,38 @@ class AccountForm(forms.ModelForm):
         specialty = cleaned_data.get('specialty')
         
         # If psychologist, require office and specialty
-        if role == 'psychologist':
+        if role and role.code == 'psychologist':
             if not doctors_office:
                 self.add_error('doctors_office', "Doctor's office is required for psychologists.")
             if not specialty:
                 self.add_error('specialty', "Specialty is required for psychologists.")
         
         return cleaned_data
+
+
+class RoleForm(forms.ModelForm):
+    """Simple form for creating new roles.
+    
+    Only requires a name input - the code is auto-generated.
+    Follows Single Responsibility Principle.
+    """
+    
+    class Meta:
+        model = Role
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter role name (e.g., Manager, Admin)',
+                'autofocus': True
+            }),
+        }
+    
+    def clean_name(self):
+        """Validate role name uniqueness."""
+        name = self.cleaned_data.get('name')
+        if name:
+            # Check if a role with this name already exists
+            if Role.objects.filter(name__iexact=name).exists():
+                raise ValidationError("A role with this name already exists.")
+        return name

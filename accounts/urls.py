@@ -1,10 +1,16 @@
+"""URL configuration for accounts app using generic class-based views.
+
+Note: URL parameter changed from <int:account_id> to <int:pk>
+to match Django generic view conventions.
+"""
 from django.urls import path
 from . import views
 
 app_name = 'accounts'
 
 urlpatterns = [
-    path('', views.list_accounts_view, name='list'),
-    path('create/', views.create_account_view, name='create'),
-    path('<int:account_id>/', views.account_detail_view, name='detail'),
+    path('', views.AccountListView.as_view(), name='list'),
+    path('create/', views.AccountCreateView.as_view(), name='create'),
+    path('<int:pk>/', views.AccountDetailView.as_view(), name='detail'),
+    path('create_role/', views.RoleCreateView.as_view(), name='create_role'),
 ]
