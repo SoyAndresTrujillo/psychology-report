@@ -56,8 +56,11 @@ class MongoDBClient:
             mongodb_database = settings.MONGODB_DATABASE
             
             # For MongoDB Atlas URIs (mongodb+srv://) with embedded credentials
-            # Use the URI directly with TLS certificate verification
-            if mongodb_uri.startswith('mongodb+srv://') or mongodb_uri.startswith('mongodb://'):
+            # Use the URI directly with TLS certificate verification.
+            # Only mongodb+srv:// belongs here: tlsCAFile forces TLS, so a plain
+            # mongodb:// URI (local MongoDB without TLS) fails the handshake.
+            # Matching it here also made the elif/else branches below unreachable.
+            if mongodb_uri.startswith('mongodb+srv://'):
                 # MongoDB Atlas URIs already contain credentials and connection options
                 # Just ensure TLS certificate verification is configured
                 self._client = MongoClient(
