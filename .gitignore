@@ -49,4 +49,10 @@ postgres_data/
 Thumbs.db
 
 # Windsurf
-.Windsurf
+.Windsurf.env.*
+!.env.example
+!env.example
+*.pyc
+.venv/
+node_modules/
+.vite/
